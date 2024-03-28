@@ -19,7 +19,7 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieUser"
+            android:id="@+id/tieEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:hint="Password"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintBottom_toTopOf="@+id/btnSingUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilUser">
@@ -46,7 +46,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSingUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -55,5 +55,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
