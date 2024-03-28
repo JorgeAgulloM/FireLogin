@@ -2,7 +2,6 @@ package com.softyorch.firelogin.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -11,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
 import com.softyorch.firelogin.ui.detail.DetailActivity
+import com.softyorch.firelogin.ui.signup.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -43,18 +43,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        binding.btnLogin.setOnClickListener {
-            viewModel.login(
-                user = binding.tieUser.text.toString(),
-                pass = binding.tiePass.text.toString()
-            ) {
-                navigateToDetail()
+        binding.apply {
+            btnLogin.setOnClickListener {
+                viewModel.login(
+                    user = binding.tieUser.text.toString(),
+                    pass = binding.tiePass.text.toString()
+                ) {
+                    navigateToDetail()
+                }
+            }
+            tvSignUp.setOnClickListener {
+                navigateToSignUp()
             }
         }
     }
 
+    private fun navigateToSignUp() {
+        startActivity(Intent(this, SignUpActivity::class.java))
+    }
+
     private fun navigateToDetail() {
-        Log.i("FireLoginTag", "NavigateToDetail")
         startActivity(Intent(this, DetailActivity::class.java))
     }
 }
