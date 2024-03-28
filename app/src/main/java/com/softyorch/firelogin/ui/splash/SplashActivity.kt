@@ -1,10 +1,9 @@
 package com.softyorch.firelogin.ui.splash
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.softyorch.firelogin.R
+import androidx.appcompat.app.AppCompatActivity
 import com.softyorch.firelogin.databinding.ActivitySplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,9 +1,8 @@
 package com.softyorch.firelogin.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.softyorch.firelogin.R
+import androidx.appcompat.app.AppCompatActivity
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 
