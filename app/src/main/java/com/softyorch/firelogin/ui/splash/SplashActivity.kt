@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.softyorch.firelogin.databinding.ActivitySplashBinding
+import com.softyorch.firelogin.ui.detail.DetailActivity
 import com.softyorch.firelogin.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,14 +14,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
-    private val splashViewModel: SplashViewModel by viewModels()
+    private val viewModel: SplashViewModel by viewModels()
     private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        navigateToLogin()
+        when (viewModel.checkDestination()) {
+            SplashDestination.Home -> navigateToDetail()
+            SplashDestination.Login -> navigateToLogin()
+        }
+    }
+
+    private fun navigateToDetail() {
+        startActivity(Intent(this, DetailActivity::class.java))
     }
 
     private fun navigateToLogin() {
