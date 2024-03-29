@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FireLogin</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">797097605184390</string>
+    <string name="fb_login_protocol_scheme">fb797097605184390</string>
+    <string name="facebook_client_token">3d8645c850b2504670fb1191293d0561</string>
+
 </resources>
