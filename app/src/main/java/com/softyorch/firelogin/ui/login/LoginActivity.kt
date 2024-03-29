@@ -18,6 +18,10 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
@@ -32,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var binding: ActivityLoginBinding
+
+    private lateinit var callbackManager: CallbackManager
 
     private val googleLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -94,7 +100,35 @@ class LoginActivity : AppCompatActivity() {
                     googleLauncher.launch(gsc.signInIntent)
                 }
             }
+
+            //Facebook
+            btnLoginFacebook.apply {
+                this@LoginActivity.callbackManager = CallbackManager.Factory.create()
+
+                setPermissions("email", "public_profile")
+                registerCallback(
+                    this@LoginActivity.callbackManager,
+                    object : FacebookCallback<LoginResult> {
+                        override fun onCancel() {
+                            showToast("Prbamos con otra red social?")
+                        }
+
+                        override fun onError(error: FacebookException) {
+                            showToast("Ha ocurrido un error ${error.message}")
+                        }
+
+                        override fun onSuccess(result: LoginResult) {
+                            viewModel.loginWithFacebook(result.accessToken) {
+                                navigateToDetail()
+                            }
+                        }
+                    }
+                )
+            }
+            //Facebook end
         }
+
+
     }
 
     private fun showPhoneLogin() {
