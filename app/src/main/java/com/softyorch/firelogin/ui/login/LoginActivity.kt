@@ -2,13 +2,17 @@ package com.softyorch.firelogin.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
+import com.softyorch.firelogin.databinding.DialogPhoneLoginBinding
 import com.softyorch.firelogin.ui.detail.DetailActivity
 import com.softyorch.firelogin.ui.signup.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +59,42 @@ class LoginActivity : AppCompatActivity() {
             tvSignUp.setOnClickListener {
                 navigateToSignUp()
             }
+            btnLoginPhone.setOnClickListener {
+                showPhoneLogin()
+            }
         }
+    }
+
+    private fun showPhoneLogin() {
+        val phoneBinding = DialogPhoneLoginBinding.inflate(layoutInflater)
+        val alertDialog = AlertDialog.Builder(this).apply { setView(phoneBinding.root) }.create()
+
+        phoneBinding.apply {
+            btnPhone.setOnClickListener {
+                viewModel.loginWithPhone(
+                    phoneNumber = tiePhone.text.toString(),
+                    activity = this@LoginActivity
+                ) { phoneVerification ->
+                    when (phoneVerification) {
+                        PhoneVerification.CodeSend -> {
+                            phoneBinding.pinView.isVisible = true
+
+                        }
+                        PhoneVerification.VerifiedPhoneComplete -> navigateToDetail()
+                        is PhoneVerification.VerifiedPhoneFailure -> showToast("Error al validar el teléfono: ${phoneVerification.msg}")
+                    }
+                }
+            }
+            pinView.doOnTextChanged { text, _, _, _ ->
+                if (text?.length == 6) {
+                    viewModel.verifyCode(text.toString()) {
+                        navigateToDetail()
+                    }
+                }
+            }
+        }
+
+        alertDialog.show()
     }
 
     private fun navigateToSignUp() {
@@ -66,5 +105,9 @@ class LoginActivity : AppCompatActivity() {
         startActivity(Intent(this, DetailActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         })
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 }
