@@ -1,11 +1,14 @@
 package com.softyorch.firelogin.ui.login
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +18,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
 import com.softyorch.firelogin.databinding.DialogPhoneLoginBinding
 import com.softyorch.firelogin.ui.detail.DetailActivity
@@ -27,6 +32,23 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var binding: ActivityLoginBinding
+
+    private val googleLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+                try {
+                    val account = task.getResult(ApiException::class.java)!!
+                    viewModel.loginWithGoogle(account.idToken!!) {
+                        navigateToDetail()
+                        binding.pbLoading.isGone = true
+                    }
+                } catch (ex: ApiException) {
+                    showToast("Ha ocurrido un error: ${ex.message}")
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +88,12 @@ class LoginActivity : AppCompatActivity() {
             btnLoginPhone.setOnClickListener {
                 showPhoneLogin()
             }
+            btnLoginGoogle.setOnClickListener {
+                viewModel.onGoogleLoginSelected { gsc ->
+                    pbLoading.isVisible = true
+                    googleLauncher.launch(gsc.signInIntent)
+                }
+            }
         }
     }
 
@@ -97,6 +125,7 @@ class LoginActivity : AppCompatActivity() {
                             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                             imm.showSoftInput(pinView, InputMethodManager.SHOW_IMPLICIT)
                         }
+
                         PhoneVerification.VerifiedPhoneComplete -> navigateToDetail()
                         is PhoneVerification.VerifiedPhoneFailure -> showToast("Error al validar el teléfono: ${phoneVerification.msg}")
                     }
