@@ -1,18 +1,28 @@
 package com.softyorch.firelogin.data
 
 import android.app.Activity
+import android.content.Context
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.softyorch.firelogin.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
+class AuthService @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    @ApplicationContext private val context: Context
+) {
 
     suspend fun login(user: String, pass: String): FirebaseUser? =
         suspendCancellableCoroutine { cancellableContinuation ->
@@ -30,7 +40,7 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
         callback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     ) {
 
-        //Solo para pruebas
+        //Solo para pruebas para evitar la creación de la cuenta.
         //firebaseAuth.firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber("+34 123456789", "123456")
 
         val options = PhoneAuthOptions
@@ -42,6 +52,11 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
             .build()
 
         PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    suspend fun loginWithGoogle(idToken: String): FirebaseUser? {
+        val credentials = GoogleAuthProvider.getCredential(idToken, null)
+        return completeRegisterWithCredentials(credentials)
     }
 
     suspend fun signUp(email: String, pass: String): FirebaseUser? =
@@ -57,16 +72,32 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth) {
 
     fun logout() {
         firebaseAuth.signOut()
+        getGoogleClient().signOut()
     }
 
     fun isUserLogged(): Boolean = getCurrentUser() != null
 
     suspend fun verifyCode(verificationCode: String, phoneCode: String): FirebaseUser? {
         val credentials = PhoneAuthProvider.getCredential(verificationCode, phoneCode)
-        return completeRegisterWithPhone(credentials)
+        return completeRegisterWithCredentials(credentials)
     }
 
-    suspend fun completeRegisterWithPhone(credentials: PhoneAuthCredential): FirebaseUser? =
+    suspend fun completeRegisterWithPhoneVerification(credentials: AuthCredential): FirebaseUser? =
+        completeRegisterWithCredentials(credentials)
+
+    fun getGoogleClient(): GoogleSignInClient {
+        // cuando llamamos la primera vez a R.string.default_web_client_id no existe, pero al terminar el build y buildear la
+        // app se autogenera dicho string
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(context, gso)
+    }
+
+    private suspend fun completeRegisterWithCredentials(credentials: AuthCredential): FirebaseUser? =
         suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.signInWithCredential(credentials)
                 .addOnSuccessListener { authResult ->
