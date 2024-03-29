@@ -126,9 +126,13 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
             //Facebook end
+
+            btnLoginGitHub.setOnClickListener {
+                viewModel.onGitHubLoginSelected(this@LoginActivity) {
+                    navigateToDetail()
+                }
+            }
         }
-
-
     }
 
     private fun showPhoneLogin() {
