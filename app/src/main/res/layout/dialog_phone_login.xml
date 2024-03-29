@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/shape_pin_dialog"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilPhone"
@@ -12,28 +15,68 @@
         android:layout_marginHorizontal="12dp"
         android:hint="Email" />
 
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="8dp"
+        android:text="Login with Phone"
+        android:textColor="@color/white"
+        android:textSize="24dp" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tiePhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="+34 123456789" />
+        android:hint="+34 666123456"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:padding="16dp"
+        android:text="+34 123456789"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+    <TextView
+        android:id="@+id/tvPinCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:text="Insert your pin code"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:visibility="gone" />
 
     <com.chaos.view.PinView
         android:id="@+id/pinView"
         style="@style/PinWidget.PinView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:layout_marginVertical="24dp"
         android:inputType="number"
         android:itemBackground="@color/white"
         android:visibility="gone"
         app:hideLineWhenFilled="false"
         app:itemCount="6"
-        app:itemRadius="10dp" />
+        app:itemRadius="10dp"
+        tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Send SMS" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>
