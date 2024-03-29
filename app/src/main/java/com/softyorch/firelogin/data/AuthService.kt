@@ -2,10 +2,13 @@ package com.softyorch.firelogin.data
 
 import android.app.Activity
 import android.content.Context
+import com.facebook.AccessToken
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -59,6 +62,11 @@ class AuthService @Inject constructor(
         return completeRegisterWithCredentials(credentials)
     }
 
+    suspend fun loginWithFacebook(accessToken: AccessToken): FirebaseUser? {
+        val credentials = FacebookAuthProvider.getCredential(accessToken.token)
+        return completeRegisterWithCredentials(credentials)
+    }
+
     suspend fun signUp(email: String, pass: String): FirebaseUser? =
         suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.createUserWithEmailAndPassword(email, pass)
@@ -73,6 +81,7 @@ class AuthService @Inject constructor(
     fun logout() {
         firebaseAuth.signOut()
         getGoogleClient().signOut()
+        LoginManager.getInstance().logOut()
     }
 
     fun isUserLogged(): Boolean = getCurrentUser() != null
