@@ -1,11 +1,15 @@
 package com.softyorch.firelogin.ui.login
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
@@ -71,14 +75,27 @@ class LoginActivity : AppCompatActivity() {
 
         phoneBinding.apply {
             btnPhone.setOnClickListener {
+                pbLoading.isVisible = true
+                tiePhone.isEnabled = false
+                btnPhone.isEnabled = false
+                btnPhone.setTextColor(Color.WHITE)
+
                 viewModel.loginWithPhone(
                     phoneNumber = tiePhone.text.toString(),
                     activity = this@LoginActivity
                 ) { phoneVerification ->
                     when (phoneVerification) {
                         PhoneVerification.CodeSend -> {
-                            phoneBinding.pinView.isVisible = true
+                            tvHeader.isGone = true
+                            tvPinCode.isVisible = true
+                            pinView.isVisible = true
+                            pbLoading.isGone = true
+                            tiePhone.isGone = true
+                            btnPhone.isGone = true
 
+                            pinView.requestFocus()
+                            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.showSoftInput(pinView, InputMethodManager.SHOW_IMPLICIT)
                         }
                         PhoneVerification.VerifiedPhoneComplete -> navigateToDetail()
                         is PhoneVerification.VerifiedPhoneFailure -> showToast("Error al validar el teléfono: ${phoneVerification.msg}")
@@ -94,7 +111,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        alertDialog.show()
+        alertDialog.apply {
+            show()
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
     }
 
     private fun navigateToSignUp() {
