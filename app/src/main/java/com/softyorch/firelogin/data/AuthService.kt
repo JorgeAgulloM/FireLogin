@@ -72,15 +72,17 @@ class AuthService @Inject constructor(
     suspend fun loginWithGitHub(activity: Activity): FirebaseUser? {
         val provider = OAuthProvider.newBuilder("github.com").apply {
             scopes = listOf("user:email")
-        }
+        }.build()
 
-        return suspendCancellableCoroutine { cancellableContinuation ->
-            firebaseAuth.pendingAuthResult?.addOnSuccessListener { authResult ->
-                cancellableContinuation.resume(authResult.user)
-            }?.addOnFailureListener { ex ->
-                cancellableContinuation.resumeWithException(ex)
-            } ?: completeRegisterWithProvider(activity, provider.build(), cancellableContinuation)
-        }
+        return initRegisterWithProvider(activity, provider)
+    }
+
+    suspend fun loginWithMicrosoft(activity: Activity): FirebaseUser? {
+        val provider = OAuthProvider.newBuilder("microsoft.com").apply {
+            scopes = listOf("mail.read", "calendars.read")
+        }.build()
+
+        return initRegisterWithProvider(activity, provider)
     }
 
     suspend fun signUp(email: String, pass: String): FirebaseUser? =
@@ -132,6 +134,17 @@ class AuthService @Inject constructor(
                     cancellableContinuation.resumeWithException(ex)
                 }
         }
+
+
+    private suspend fun initRegisterWithProvider(activity: Activity, provider: OAuthProvider): FirebaseUser? {
+        return suspendCancellableCoroutine { cancellableContinuation ->
+            firebaseAuth.pendingAuthResult?.addOnSuccessListener { authResult ->
+                cancellableContinuation.resume(authResult.user)
+            }?.addOnFailureListener { ex ->
+                cancellableContinuation.resumeWithException(ex)
+            } ?: completeRegisterWithProvider(activity, provider, cancellableContinuation)
+        }
+    }
 
     private fun completeRegisterWithProvider(
         activity: Activity,
