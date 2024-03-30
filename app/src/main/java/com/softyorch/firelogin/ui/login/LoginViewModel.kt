@@ -140,4 +140,16 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         }
     }
 
+    fun onMicrosoftLoginSelected(activity: Activity, navigateToDetails: () -> Unit) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authService.loginWithMicrosoft(activity)
+            }
+
+            if (result != null) {
+                navigateToDetails()
+            }
+        }
+    }
+
 }

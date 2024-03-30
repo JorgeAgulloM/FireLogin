@@ -132,6 +132,12 @@ class LoginActivity : AppCompatActivity() {
                     navigateToDetail()
                 }
             }
+
+            btnLoginMicrosoft.setOnClickListener {
+                viewModel.onMicrosoftLoginSelected(this@LoginActivity) {
+                    navigateToDetail()
+                }
+            }
         }
     }
 
