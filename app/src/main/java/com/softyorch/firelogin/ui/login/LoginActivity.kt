@@ -138,6 +138,12 @@ class LoginActivity : AppCompatActivity() {
                     navigateToDetail()
                 }
             }
+
+            btnLoginTwitter.setOnClickListener {
+                viewModel.onTwitterLoginSelected(this@LoginActivity) {
+                    navigateToDetail()
+                }
+            }
         }
     }
 
