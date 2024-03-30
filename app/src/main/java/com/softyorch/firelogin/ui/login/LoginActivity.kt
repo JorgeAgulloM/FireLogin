@@ -21,6 +21,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -102,10 +103,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             //Facebook
-            btnLoginFacebook.apply {
+            LoginManager.getInstance().apply {
                 this@LoginActivity.callbackManager = CallbackManager.Factory.create()
-
-                setPermissions("email", "public_profile")
                 registerCallback(
                     this@LoginActivity.callbackManager,
                     object : FacebookCallback<LoginResult> {
@@ -124,6 +123,13 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 )
+                btnLoginFacebook.setOnClickListener {
+                    logInWithReadPermissions(
+                        activityResultRegistryOwner = this@LoginActivity,
+                        callbackManager = this@LoginActivity.callbackManager,
+                        permissions = listOf("email", "public_profile")
+                    )
+                }
             }
             //Facebook end
 
