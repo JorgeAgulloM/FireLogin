@@ -144,6 +144,12 @@ class LoginActivity : AppCompatActivity() {
                     navigateToDetail()
                 }
             }
+
+            btnLoginYahoo.setOnClickListener {
+                viewModel.onYahooLoginSelected(this@LoginActivity) {
+                    navigateToDetail()
+                }
+            }
         }
     }
 

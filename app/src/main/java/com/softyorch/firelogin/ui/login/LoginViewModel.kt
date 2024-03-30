@@ -58,7 +58,11 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         }
     }
 
-    fun loginWithPhone(phoneNumber: String, activity: Activity, onCallback: (PhoneVerification) -> Unit) {
+    fun loginWithPhone(
+        phoneNumber: String,
+        activity: Activity,
+        onCallback: (PhoneVerification) -> Unit
+    ) {
         if (phoneNumber.isNotEmpty()) viewModelScope.launch {
             _isLoading.update { true }
 
@@ -109,7 +113,10 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
                 onCallback(PhoneVerification.VerifiedPhoneFailure(exception.message.orEmpty()))
             }
 
-            override fun onCodeSent(verificationCode: String, p1: PhoneAuthProvider.ForceResendingToken) {
+            override fun onCodeSent(
+                verificationCode: String,
+                p1: PhoneAuthProvider.ForceResendingToken
+            ) {
                 _isLoading.update { false }
                 this@LoginViewModel.verificationCode = verificationCode
                 onCallback(PhoneVerification.CodeSend)
@@ -156,6 +163,18 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 authService.loginWithTwitter(activity)
+            }
+
+            if (result != null) {
+                navigateToDetails()
+            }
+        }
+    }
+
+    fun onYahooLoginSelected(activity: Activity, navigateToDetails: () -> Unit) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authService.loginWithYahoo(activity)
             }
 
             if (result != null) {
