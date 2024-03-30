@@ -19,6 +19,7 @@ import com.softyorch.firelogin.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -30,14 +31,9 @@ class AuthService @Inject constructor(
 ) {
 
     suspend fun login(user: String, pass: String): FirebaseUser? =
-        suspendCancellableCoroutine { cancellableContinuation ->
-            firebaseAuth.signInWithEmailAndPassword(user, pass)
-                .addOnSuccessListener {
-                    cancellableContinuation.resume(it.user)
-                }.addOnFailureListener { except ->
-                    cancellableContinuation.resumeWithException(except)
-                }
-        }
+        firebaseAuth.signInWithEmailAndPassword(user, pass).await().user
+
+    suspend fun loginAnonymously(): FirebaseUser? = firebaseAuth.signInAnonymously().await().user
 
     fun loginWithPhone(
         phoneNumber: String,
@@ -148,7 +144,10 @@ class AuthService @Inject constructor(
         }
 
 
-    private suspend fun initRegisterWithProvider(activity: Activity, provider: OAuthProvider): FirebaseUser? {
+    private suspend fun initRegisterWithProvider(
+        activity: Activity,
+        provider: OAuthProvider
+    ): FirebaseUser? {
         return suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.pendingAuthResult?.addOnSuccessListener { authResult ->
                 cancellableContinuation.resume(authResult.user)

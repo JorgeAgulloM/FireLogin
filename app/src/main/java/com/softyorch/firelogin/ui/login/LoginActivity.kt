@@ -89,12 +89,15 @@ class LoginActivity : AppCompatActivity() {
                     navigateToDetail()
                 }
             }
+
             tvSignUp.setOnClickListener {
                 navigateToSignUp()
             }
+
             btnLoginPhone.setOnClickListener {
                 showPhoneLogin()
             }
+
             btnLoginGoogle.setOnClickListener {
                 viewModel.onGoogleLoginSelected { gsc ->
                     pbLoading.isVisible = true
@@ -132,6 +135,12 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
             //Facebook end
+
+            btnLoginAnonymously.setOnClickListener {
+                viewModel.onAnonymouslyLoginSelected {
+                    navigateToDetail()
+                }
+            }
 
             btnLoginGitHub.setOnClickListener {
                 viewModel.onOauthLoginSelected(OAuthLogin.GitHub, this@LoginActivity) {
