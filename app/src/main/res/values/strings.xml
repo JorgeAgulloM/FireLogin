@@ -5,5 +5,17 @@
     <string name="facebook_app_id">797097605184390</string>
     <string name="fb_login_protocol_scheme">fb797097605184390</string>
     <string name="facebook_client_token">3d8645c850b2504670fb1191293d0561</string>
+    <string name="firebase_logo">Firebase Logo</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signup">SignUp</string>
+    <string name="login">Login</string>
+    <string name="login_with_phone">Login With Phone</string>
+    <string name="login_with_google">Login With Google</string>
+    <string name="login_with_facebook">Login With Facebook</string>
+    <string name="login_with_github">Login With GitHub</string>
+    <string name="login_with_microsoft">Login With Microsoft</string>
+    <string name="login_with_twitter">Login With Twitter</string>
+    <string name="login_with_yahoo">Login With Yahoo</string>
 
 </resources>
