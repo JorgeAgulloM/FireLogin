@@ -91,6 +91,11 @@ class AuthService @Inject constructor(
         return initRegisterWithProvider(activity, provider)
     }
 
+    suspend fun loginWithYahoo(activity: Activity): FirebaseUser? {
+        val provider = OAuthProvider.newBuilder("yahoo.com").build()
+
+        return initRegisterWithProvider(activity, provider)
+    }
 
     suspend fun signUp(email: String, pass: String): FirebaseUser? =
         suspendCancellableCoroutine { cancellableContinuation ->
