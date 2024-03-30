@@ -26,10 +26,10 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
 
     private lateinit var verificationCode: String
 
-    fun login(user: String, pass: String, navigateToDetails: () -> Unit) {
+    fun onStandardLoginSelected(user: String, pass: String, navigateToDetails: () -> Unit) {
         if (user.isNotEmpty() && pass.isNotEmpty()) {
             viewModelScope.launch {
-                _isLoading.value = true
+                _isLoading.update { true }
 
                 val result = withContext(Dispatchers.IO) {
                     authService.login(user, pass)
@@ -37,28 +37,14 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
 
                 if (result != null) {
                     navigateToDetails()
-                } else {
-
                 }
 
-                _isLoading.value = false
+                _isLoading.update { false }
             }
         }
     }
 
-    fun verifyCode(phoneCode: String, onSuccessVerification: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.verifyCode(verificationCode, phoneCode)
-            }
-
-            if (result != null) {
-                onSuccessVerification()
-            }
-        }
-    }
-
-    fun loginWithPhone(
+    fun onPhoneLoginSelected(
         phoneNumber: String,
         activity: Activity,
         onCallback: (PhoneVerification) -> Unit
@@ -76,8 +62,10 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         }
     }
 
-    fun loginWithGoogle(idToken: String, navigateToDetails: () -> Unit) {
+    fun onLoginGoogleSelected(idToken: String, navigateToDetails: () -> Unit) {
         viewModelScope.launch {
+            _isLoading.update { true }
+
             val result = withContext(Dispatchers.IO) {
                 authService.loginWithGoogle(idToken)
             }
@@ -85,12 +73,63 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
             if (result != null) {
                 navigateToDetails()
             }
+
+            _isLoading.update { false }
         }
     }
 
     fun onGoogleLoginSelected(googleLauncherLogin: (GoogleSignInClient) -> Unit) {
         val gsc = authService.getGoogleClient()
         googleLauncherLogin(gsc)
+    }
+
+    fun onFacebookLoginSelected(accessToken: AccessToken, navigateToDetail: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.update { true }
+
+            val result = withContext(Dispatchers.IO) {
+                authService.loginWithFacebook(accessToken)
+            }
+
+            if (result != null) {
+                navigateToDetail()
+            }
+
+            _isLoading.update { false }
+        }
+    }
+
+    fun onOauthLoginSelected(oauthLogin: OAuthLogin, activity: Activity, navigateToDetails: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.update { true }
+
+            val result = withContext(Dispatchers.IO) {
+                when (oauthLogin) {
+                    OAuthLogin.GitHub -> authService.loginWithGitHub(activity)
+                    OAuthLogin.Microsoft -> authService.loginWithMicrosoft(activity)
+                    OAuthLogin.Twitter -> authService.loginWithTwitter(activity)
+                    OAuthLogin.Yahoo -> authService.loginWithYahoo(activity)
+                }
+            }
+
+            if (result != null) {
+                navigateToDetails()
+            }
+
+            _isLoading.update { false }
+        }
+    }
+
+    fun verifyCode(phoneCode: String, onSuccessVerification: () -> Unit) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authService.verifyCode(verificationCode, phoneCode)
+            }
+
+            if (result != null) {
+                onSuccessVerification()
+            }
+        }
     }
 
     private fun onVerificationStateChangedCallbacks(onCallback: (PhoneVerification) -> Unit) =
@@ -122,65 +161,5 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
                 onCallback(PhoneVerification.CodeSend)
             }
         }
-
-    fun loginWithFacebook(accessToken: AccessToken, navigateToDetail: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.loginWithFacebook(accessToken)
-            }
-
-            if (result != null) {
-                navigateToDetail()
-            }
-        }
-    }
-
-    fun onGitHubLoginSelected(activity: Activity, navigationToDetails: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.loginWithGitHub(activity)
-            }
-
-            if (result != null) {
-                navigationToDetails()
-            }
-        }
-    }
-
-    fun onMicrosoftLoginSelected(activity: Activity, navigateToDetails: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.loginWithMicrosoft(activity)
-            }
-
-            if (result != null) {
-                navigateToDetails()
-            }
-        }
-    }
-
-    fun onTwitterLoginSelected(activity: Activity, navigateToDetails: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.loginWithTwitter(activity)
-            }
-
-            if (result != null) {
-                navigateToDetails()
-            }
-        }
-    }
-
-    fun onYahooLoginSelected(activity: Activity, navigateToDetails: () -> Unit) {
-        viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                authService.loginWithYahoo(activity)
-            }
-
-            if (result != null) {
-                navigateToDetails()
-            }
-        }
-    }
 
 }
