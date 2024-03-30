@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
 
                 try {
                     val account = task.getResult(ApiException::class.java)!!
-                    viewModel.loginWithGoogle(account.idToken!!) {
+                    viewModel.onLoginGoogleSelected(account.idToken!!) {
                         navigateToDetail()
                         binding.pbLoading.isGone = true
                     }
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.apply {
             btnLogin.setOnClickListener {
-                viewModel.login(
+                viewModel.onStandardLoginSelected(
                     user = binding.tieUser.text.toString(),
                     pass = binding.tiePass.text.toString()
                 ) {
@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                         override fun onSuccess(result: LoginResult) {
-                            viewModel.loginWithFacebook(result.accessToken) {
+                            viewModel.onFacebookLoginSelected(result.accessToken) {
                                 navigateToDetail()
                             }
                         }
@@ -134,25 +134,25 @@ class LoginActivity : AppCompatActivity() {
             //Facebook end
 
             btnLoginGitHub.setOnClickListener {
-                viewModel.onGitHubLoginSelected(this@LoginActivity) {
+                viewModel.onOauthLoginSelected(OAuthLogin.GitHub, this@LoginActivity) {
                     navigateToDetail()
                 }
             }
 
             btnLoginMicrosoft.setOnClickListener {
-                viewModel.onMicrosoftLoginSelected(this@LoginActivity) {
+                viewModel.onOauthLoginSelected(OAuthLogin.Microsoft, this@LoginActivity) {
                     navigateToDetail()
                 }
             }
 
             btnLoginTwitter.setOnClickListener {
-                viewModel.onTwitterLoginSelected(this@LoginActivity) {
+                viewModel.onOauthLoginSelected(OAuthLogin.Twitter, this@LoginActivity) {
                     navigateToDetail()
                 }
             }
 
             btnLoginYahoo.setOnClickListener {
-                viewModel.onYahooLoginSelected(this@LoginActivity) {
+                viewModel.onOauthLoginSelected(OAuthLogin.Yahoo, this@LoginActivity) {
                     navigateToDetail()
                 }
             }
@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
                 btnPhone.isEnabled = false
                 btnPhone.setTextColor(Color.WHITE)
 
-                viewModel.loginWithPhone(
+                viewModel.onPhoneLoginSelected(
                     phoneNumber = tiePhone.text.toString(),
                     activity = this@LoginActivity
                 ) { phoneVerification ->
