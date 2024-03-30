@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="whiteSmoke">#CBFFFFFF</color>
     <color name="splash">#FFFF5A26</color>
     <color name="background">#FF27313E</color>
+    <color name="bg_til">#34FFFFFF</color>
 </resources>
