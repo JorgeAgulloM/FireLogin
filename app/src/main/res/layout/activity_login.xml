@@ -58,7 +58,7 @@
         android:layout_marginHorizontal="12dp"
         android:hint="@string/password"
         android:textColorHint="@color/whiteSmoke"
-        app:layout_constraintBottom_toTopOf="@+id/simpleLoginContainer"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilUser">
@@ -83,36 +83,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilPass" />
 
-    <LinearLayout
-        android:id="@+id/simpleLoginContainer"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="8dp"
+        android:backgroundTint="@color/black"
+        android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSignUp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/black"
-            android:text="@string/login" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnLoginPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:backgroundTint="@color/black"
-            android:src="@drawable/ic_phone"
-            app:tint="@color/white"
-            android:contentDescription="@string/login_with_phone" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tvSignUp" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -121,13 +102,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simpleLoginContainer"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -143,9 +125,9 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_google"
                     android:src="@drawable/ic_google_logo"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_google" />
+                    app:tint="@color/white" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnLoginFacebook"
@@ -154,9 +136,9 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_facebook"
                     android:src="@drawable/ic_fb"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_facebook" />
+                    app:tint="@color/white" />
 
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -166,9 +148,19 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_github"
                     android:src="@drawable/ic_github"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_github" />
+                    app:tint="@color/white" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnLoginAnonymously"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_phone"
+                    android:src="@drawable/ic_anonymously"
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
@@ -185,9 +177,9 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_microsoft"
                     android:src="@drawable/ic_microsoft"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_microsoft" />
+                    app:tint="@color/white" />
 
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -197,9 +189,9 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_twitter"
                     android:src="@drawable/ic_twitter"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_twitter" />
+                    app:tint="@color/white" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnLoginYahoo"
@@ -208,9 +200,19 @@
                     android:layout_margin="12dp"
                     android:layout_marginHorizontal="12dp"
                     android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_yahoo"
                     android:src="@drawable/ic_yahoo"
-                    app:tint="@color/white"
-                    android:contentDescription="@string/login_with_yahoo" />
+                    app:tint="@color/white" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnLoginPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/black"
+                    android:contentDescription="@string/login_with_phone"
+                    android:src="@drawable/ic_phone"
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
