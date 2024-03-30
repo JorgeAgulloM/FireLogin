@@ -85,6 +85,13 @@ class AuthService @Inject constructor(
         return initRegisterWithProvider(activity, provider)
     }
 
+    suspend fun loginWithTwitter(activity: Activity): FirebaseUser? {
+        val provider = OAuthProvider.newBuilder("twitter.com").build()
+
+        return initRegisterWithProvider(activity, provider)
+    }
+
+
     suspend fun signUp(email: String, pass: String): FirebaseUser? =
         suspendCancellableCoroutine { cancellableContinuation ->
             firebaseAuth.createUserWithEmailAndPassword(email, pass)
