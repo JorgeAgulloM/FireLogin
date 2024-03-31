@@ -2,7 +2,6 @@ package com.softyorch.firelogin.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -27,7 +25,6 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
-import com.softyorch.firelogin.R
 import com.softyorch.firelogin.databinding.ActivityLoginBinding
 import com.softyorch.firelogin.databinding.DialogPhoneLoginBinding
 import com.softyorch.firelogin.ui.detail.DetailActivity
