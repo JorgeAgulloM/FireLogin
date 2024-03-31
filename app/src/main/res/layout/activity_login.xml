@@ -13,7 +13,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/firebase_logo"
         android:src="@drawable/firebase"
-        app:layout_constraintBottom_toTopOf="@+id/tilUser"
+        app:layout_constraintBottom_toTopOf="@+id/cvLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,50 +28,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilUser"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/email"
-        android:textColorHint="@color/whiteSmoke"
-        app:layout_constraintBottom_toTopOf="@+id/tilPass"
+        android:layout_marginHorizontal="22dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivHeader">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieUser"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="agullojorge@gmail.com"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:orientation="vertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:paddingTop="8dp"
+                app:boxBackgroundMode="none">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPass"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:hint="@string/password"
-        android:textColorHint="@color/whiteSmoke"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilUser">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tieUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="email@gmail.com" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiePass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Temporal*0"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:paddingTop="8dp"
+                app:boxBackgroundMode="none">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Temporal*0" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tvSignUp"
@@ -81,7 +89,7 @@
         android:text="@string/signup"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPass" />
+        app:layout_constraintTop_toBottomOf="@+id/cvLogin" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
